@@ -1,0 +1,5 @@
+<img
+      src="/path-to-your-spin.svg" // Replace with the actual path to your spin.svg
+      alt="Loading"
+      className={`spin-animation`} // Apply only the spin-animation class
+    />
