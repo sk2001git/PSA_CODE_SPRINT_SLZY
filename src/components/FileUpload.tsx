@@ -21,7 +21,7 @@ const FileUpload: React.FC = () => {
 
     if (file) {
       if (file.name.endsWith('.csv')) {
-        setFileName(file.name);
+        setFileName('NewHireDataSet.csv');
         setIsUploaded(true);
         setUploadedFile(file);
       } else {
