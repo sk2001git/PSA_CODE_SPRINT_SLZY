@@ -53,7 +53,7 @@ const FileUpload: React.FC = () => {
       formData.append('file', uploadedFile);
 
       // Replace 'your-api-endpoint' with the actual API endpoint URL
-      fetch('http://localhost:5000/your-api-endpoint', {
+      fetch('/your-api-endpoint', {
         method: 'POST',
         body: formData,
       })
