@@ -3,7 +3,10 @@ import React, { useRef, useState } from 'react';
 import styles from './FileUpload.module.css';
 import Image from 'next/image';
 
-
+interface UserScore {
+  name: string;
+  score: number;
+}
 
 const FileUpload: React.FC = () => {
   const [fileName, setFileName] = useState<string | null>(null);
@@ -13,6 +16,7 @@ const FileUpload: React.FC = () => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isAnalyzed, setIsAnalyzed] = useState<boolean>(false);
+  const [userScore, setUserScore] = useState<UserScore | null>(null);  // Declare this state outside the function
 
 
 
@@ -59,8 +63,12 @@ const FileUpload: React.FC = () => {
           }
         })
         .then(data => {
-          // Handle the response data from the Python backend here
-          console.log('Response from server:', data);
+          const scoreData: UserScore = {
+            name: data.name,
+            score: data.score
+          };
+          setUserScore(scoreData); // Store the decoded data in the state
+          console.log('Decoded data:', scoreData);
         })
         .catch(error => {
           console.error('Error:', error);
@@ -135,6 +143,13 @@ const FileUpload: React.FC = () => {
         </div>
       )
       } 
+      {isAnalyzed && userScore && (
+      <div className={styles.resultBox}>
+        <h3>Analysis Result:</h3>
+        <p><strong>Name:</strong> {userScore.name}</p>
+        <p><strong>Score:</strong> {userScore.score}</p>
+      </div>
+    )}
     </div>
   );
 }
