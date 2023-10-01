@@ -94,12 +94,15 @@ def main():
     list_of_names = df_new_hire['Names'].tolist() 
 
 
-    dictionary_of_names_scores = {}
+    list_of_name_score_dicts = []
 
     for i in range(len(list_of_names)):
-        dictionary_of_names_scores[list_of_names[i]] = list_of_scores[i]
+        name = list_of_names[i]
+        score = list_of_scores[i]
+        name_score_dict = {'name': name, 'score': score}
+        list_of_name_score_dicts.append(name_score_dict)
 
-    json_object_names_scores = json.dumps(dictionary_of_names_scores, indent = 2)
+    json_object_names_scores = json.dumps(list_of_name_score_dicts, indent = 2)
     print(json_object_names_scores)
     return json_object_names_scores
 
