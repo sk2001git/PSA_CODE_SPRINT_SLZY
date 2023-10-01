@@ -1,13 +1,10 @@
 from flask import Flask, request, jsonify
 import json
 import backend
+import os
 
 app = Flask(__name__)
 
-@app.route('/')
-def home():
-    return 'Welcome to the SLZY PSA Code Sprint!'
-    
 UPLOAD_FOLDER = 'uploads'  # Create a directory named 'uploads' to store uploaded files
 if not os.path.exists(UPLOAD_FOLDER):    os.makedirs(UPLOAD_FOLDER)
 @app.route('/your-api-endpoint', methods=['POST'])
@@ -23,5 +20,6 @@ def upload_file():
         
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
 if __name__ == '__main__':    app.run(debug=True)
 

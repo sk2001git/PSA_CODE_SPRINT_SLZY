@@ -51,7 +51,7 @@ const FileUpload: React.FC = () => {
       formData.append('file', uploadedFile);
 
       // Replace 'your-api-endpoint' with the actual API endpoint URL
-      fetch('your-api-endpoint', {
+      fetch('/your-api-endpoint', {
         method: 'POST',
         body: formData,
       })
@@ -75,7 +75,7 @@ const FileUpload: React.FC = () => {
         })
         .finally(() => {
           setIsUploaded(false);
-          setIsOnCloud(false);
+          setIsOnCloud(true);
           setIsLoading(false);
           setIsAnalyzed(true);
         })
