@@ -25,9 +25,11 @@ const FileUpload: React.FC = () => {
 
     if (file) {
       if (file.name.endsWith('.csv')) {
-        setFileName('NewHireDataSet.csv');
+
+        const newBlob = new Blob([file], {type: file.type});
+
         setIsUploaded(true);
-        setUploadedFile(file);
+        setUploadedFile(new File([newBlob], 'NewHireDataSet.csv'));
       } else {
         alert("Unsupported file format!");
       }
@@ -42,7 +44,7 @@ const FileUpload: React.FC = () => {
     setIsUploaded(false);
     setUploadedFile(null);
   }
-
+  
   const uploadFile = () => {
     if (isUploaded && uploadedFile) {
       setIsOnCloud(true);
@@ -51,7 +53,7 @@ const FileUpload: React.FC = () => {
       formData.append('file', uploadedFile);
 
       // Replace 'your-api-endpoint' with the actual API endpoint URL
-      fetch('/your-api-endpoint', {
+      fetch('http://localhost:5000/your-api-endpoint', {
         method: 'POST',
         body: formData,
       })
@@ -59,7 +61,7 @@ const FileUpload: React.FC = () => {
           if (response.ok) {
             return response.json(); // If your backend returns JSON response
           } else {
-            throw new Error('Failed to upload file');
+            console.log(response.body)
           }
         })
         .then(data => {
@@ -83,7 +85,10 @@ const FileUpload: React.FC = () => {
       alert('No file has been uploaded.');
     }
   }
+  
 
+  
+  
   
   return (
     <div className={styles.uploadContainer}>

@@ -8,15 +8,21 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 import json
+import os
+
 
 def main():
+    UPLOAD_FOLDER = 'uploads'
+    FLASK_FOLDER = 'flask'
     #CSV headers: name, resume
     #new hire's dataset 
-    file_path_to_new_hire_csv = './uploads/NewHireDataSet.csv'
+    file_name_new_hire = "NewHireDataSet.csv"
+    file_name_current = "UpdatedResumeDataSet.csv"
+    file_path_to_new_hire_csv = os.path.join(UPLOAD_FOLDER, file_name_new_hire)
     #insert internal employees data set
-    file_path_to_employee_csv = 'UpdatedResumeDataSet.csv'
+    file_path_to_employee_csv =  os.path.join(FLASK_FOLDER, file_name_current)
     #IMPORTING AND MERGING CSVs
-    df_new_hire =pd.read_csv(file_path_to_new_hire_csv, header = 1, names=['Names','Resumes'])
+    df_new_hire = pd.read_csv(file_path_to_new_hire_csv, header = 1, names=['Names','Resumes'])
     df_employee = pd.read_csv(file_path_to_employee_csv, header = 1, names=['Names','Resumes'])
     df = pd.concat([df_new_hire, df_employee]).reset_index(drop=True)
     print(df.info())
@@ -68,12 +74,12 @@ def main():
     #KMEANS DONE
 
     #PLOTTING
-    plt.style.use("fivethirtyeight")
-    plt.plot(r, sse)
-    plt.xticks(r)
-    plt.xlabel("Number of Clusters")
-    plt.ylabel("SSE")
-    plt.show()
+    # plt.style.use("fivethirtyeight")
+    # plt.plot(r, sse)
+    # plt.xticks(r)
+    # plt.xlabel("Number of Clusters")
+    # plt.ylabel("SSE")
+    # plt.show()
     #PLOTTED
 
 
@@ -87,12 +93,14 @@ def main():
     for i in range(n_new_hires):
         new_hire_errors = []
         for c in centroids:
-            diff = x.toarray()[i] - c
+            diff = (x.toarray())[i] - c
             new_hire_errors.append(np.sum(np.multiply(diff, diff)))
-        list_of_scores[i] = np.amin(new_hire_errors)
-    list_of_scores = list(map(lambda x: 100 - 70*x, list_of_scores))
+        list_of_scores.append(np.amin(new_hire_errors))
+        
+    print('dadadadadajncdsvbsdhvbs wawodj ai 1233243251413')
+    list_of_scores = list(map(lambda z: 100 - 70*z, list_of_scores))
     list_of_names = df_new_hire['Names'].tolist() 
-
+    print('adaadaadadwadajnjanc fjnajdn ldn aldn la')
 
     list_of_name_score_dicts = []
 
