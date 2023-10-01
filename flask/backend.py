@@ -9,9 +9,14 @@ from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 import json
 import os
-
+import nltk
 
 def main():
+    try:
+        nltk.download('wordnet')
+        nltk.download('stopwords')
+    except:
+        pass
     UPLOAD_FOLDER = 'uploads'
     FLASK_FOLDER = 'flask'
     #CSV headers: name, resume
