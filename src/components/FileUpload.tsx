@@ -53,7 +53,7 @@ const FileUpload: React.FC = () => {
       formData.append('file', uploadedFile);
 
       // Replace 'your-api-endpoint' with the actual API endpoint URL
-      fetch('http://localhost:5000/your-api-endpoint', {
+      fetch('/your-api-endpoint', {
         method: 'POST',
         body: formData,
       })
@@ -65,7 +65,7 @@ const FileUpload: React.FC = () => {
           }
         })
         .then(data => {
-          const sortedData = data.sort((a, b) => b.score - a.score);
+          const sortedData = data.sort((a: { score: number }, b: { score: number }) => b.score - a.score);
           setUserScores(sortedData); // data is already an array of UserScore
           
           console.log('Decoded data:', data);
