@@ -16,8 +16,7 @@ const FileUpload: React.FC = () => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isAnalyzed, setIsAnalyzed] = useState<boolean>(false);
-  const [userScore, setUserScore] = useState<UserScore | null>(null);  // Declare this state outside the function
-
+  const [userScores, setUserScores] = useState<UserScore[]>([]);
 
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,6 +27,7 @@ const FileUpload: React.FC = () => {
 
         const newBlob = new Blob([file], {type: file.type});
 
+        setFileName(file.name);
         setIsUploaded(true);
         setUploadedFile(new File([newBlob], 'NewHireDataSet.csv'));
       } else {
@@ -65,12 +65,10 @@ const FileUpload: React.FC = () => {
           }
         })
         .then(data => {
-          const scoreData: UserScore = {
-            name: data.name,
-            score: data.score
-          };
-          setUserScore(scoreData); // Store the decoded data in the state
-          console.log('Decoded data:', scoreData);
+          const sortedData = data.sort((a, b) => b.score - a.score);
+          setUserScores(sortedData); // data is already an array of UserScore
+          
+          console.log('Decoded data:', data);
         })
         .catch(error => {
           console.error('Error:', error);
@@ -96,7 +94,7 @@ const FileUpload: React.FC = () => {
       {!isOnCloud && (
       <div className={styles.uploadBox}>
         <img src="/cloud-icon.svg" alt="Upload Icon" className={styles.uploadIcon} />
-        <p>Drag & drop files or <span className={styles.browse}>Browse</span></p>
+        <p><span className={styles.browse}>Browse file</span></p>
         <p className={styles.supportedFormat}>Supported format: CSV</p>
         <input 
           type="file" 
@@ -111,7 +109,7 @@ const FileUpload: React.FC = () => {
         <div className={styles.uploadBox}>
         <img src="/green-tick.svg" alt="Successful Upload" className={styles.uploadIcon} />
           <p>
-             You have uploaded the file successfuly!
+             You have uploaded the file successfully!
           </p>
         </div>
       )}
@@ -129,7 +127,7 @@ const FileUpload: React.FC = () => {
           </div>
         </>
       )}
-      <button className={styles.uploadBtn} onClick={uploadFile}>UPLOAD FILES</button>
+      <button className={styles.uploadBtn} onClick={uploadFile}>UPLOAD FILE</button>
       <h2>Results from Test</h2>
       {!isOnCloud && (
       <>
@@ -146,15 +144,30 @@ const FileUpload: React.FC = () => {
           </span>
           <p className="mt-4"> Please wait.... We are processing</p>
         </div>
-      )
-      } 
-      {isAnalyzed && userScore && (
-      <div className={styles.resultBox}>
-        <h3>Analysis Result:</h3>
-        <p><strong>Name:</strong> {userScore.name}</p>
-        <p><strong>Score:</strong> {userScore.score}</p>
-      </div>
-    )}
+      )} 
+      {isAnalyzed && (
+        <div className={styles.resultBox}> 
+          <table className={styles.resultTable}>
+            <thead>
+              <tr>
+                <th>Index</th>
+                <th>Name</th>
+                <th>Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              {userScores.map((userScore, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{userScore.name}</td>
+                  <td>{userScore.score}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
     </div>
   );
 }

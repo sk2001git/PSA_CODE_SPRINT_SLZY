@@ -3,7 +3,7 @@
     width: 80%;
     max-width: 540px; 
     height: 80%;
-    max-height: 900px;
+    max-height: auto;
     border: 2px dashed #ccc;
     padding: 20px;
     margin: 50px auto;
@@ -87,8 +87,25 @@
     margin-top: 20px;
     border-radius: 5px;
     background-color: #f9f9f9;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.resultTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.resultTable th {
+    background-color: #f2f2f2;
+    text-align: left;
+    padding: 8px;
 }
   
+.resultTable td {
+border: 1px solid #ddd;
+padding: 8px;
+}  
   
 .removeIcon {
     cursor: pointer;

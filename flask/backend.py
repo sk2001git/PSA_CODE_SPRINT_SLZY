@@ -22,8 +22,8 @@ def main():
     #insert internal employees data set
     file_path_to_employee_csv =  os.path.join(FLASK_FOLDER, file_name_current)
     #IMPORTING AND MERGING CSVs
-    df_new_hire = pd.read_csv(file_path_to_new_hire_csv, header = 1, names=['Names','Resumes'])
-    df_employee = pd.read_csv(file_path_to_employee_csv, header = 1, names=['Names','Resumes'])
+    df_new_hire = pd.read_csv(file_path_to_new_hire_csv, header = 0, names=['Names','Resumes'])
+    df_employee = pd.read_csv(file_path_to_employee_csv, header = 0, names=['Names','Resumes'])
     df = pd.concat([df_new_hire, df_employee]).reset_index(drop=True)
     print(df.info())
 
@@ -89,18 +89,14 @@ def main():
     centroids  = kmeans.cluster_centers_
     print(centroids)
     n_new_hires = df_new_hire.shape[0]
-    list_of_scores = []
-    for i in range(n_new_hires):
-        new_hire_errors = []
-        for c in centroids:
-            diff = (x.toarray())[i] - c
-            new_hire_errors.append(np.sum(np.multiply(diff, diff)))
-        list_of_scores.append(np.amin(new_hire_errors))
-        
-    print('dadadadadajncdsvbsdhvbs wawodj ai 1233243251413')
-    list_of_scores = list(map(lambda z: 100 - 70*z, list_of_scores))
-    list_of_names = df_new_hire['Names'].tolist() 
-    print('adaadaadadwadajnjanc fjnajdn ldn aldn la')
+    df_new_hire['features'] = np.split(x.toarray()[:n_new_hires], df_new_hire.shape[0])
+    df_new_hire['list_of_squared_diff'] = df_new_hire['features'].apply(lambda x: 
+                                                                        [np.sum(np.multiply(x - c, x - c)) for c in centroids])
+    df_new_hire['min_error'] = df_new_hire['list_of_squared_diff'].apply(lambda x: min(x))
+    df_new_hire['scores'] = df_new_hire['min_error'].apply(lambda x: 100 - 70*x) 
+    
+    list_of_scores = df_new_hire['scores'].tolist()
+    list_of_names = df_new_hire['Names'].tolist()
 
     list_of_name_score_dicts = []
 
@@ -111,7 +107,7 @@ def main():
         list_of_name_score_dicts.append(name_score_dict)
 
     json_object_names_scores = json.dumps(list_of_name_score_dicts, indent = 2)
-    print(json_object_names_scores)
+    print(df_new_hire.head(10))
     return json_object_names_scores
 
 if __name__ == "__main__":
